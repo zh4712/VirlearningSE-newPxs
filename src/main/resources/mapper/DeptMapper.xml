@@ -1,0 +1,88 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.example.virlearning.dao.DeptMapper">
+    <select id="getfindName" resultType="com.example.virlearning.entity.Department">
+        select * from department_role
+        <where>
+            <if test="name != null and name != ''">
+                and name like concat('%', #{ name }, '%')
+            </if>
+        </where>
+    </select>
+    <select id="getdepname" resultType="String">
+        select name from department_role
+        <where>
+            <if test="play_role != null and play_role != ''">
+                and play_role like concat('%', #{ role }, '%')
+            </if>
+        </where>
+    </select>
+    <select id="findDeptList" resultType="com.example.virlearning.entity.Department">
+        select
+       id,name,play_role,dep_inf,fileurl
+        from  department_role
+        where 1=1
+        <if test="start!=null and limit!=null">
+            limit #{start},#{limit}
+        </if>
+    </select>
+    <select id="getTotalDepts" resultType="int">
+        select count(*) from department_role
+        where 1=1
+
+    </select>
+    <select id="selectbyname" resultType="com.example.virlearning.entity.Department">
+        select * from department_role
+        <where>
+            <if test="name != null and name != ''">
+                and name =#{ name }
+            </if>
+        </where>
+    </select>
+    <insert id="insertDept">
+        insert into department_role(
+            name,dep_inf,play_role,fileurl)
+        values(#{name},#{dep_inf},#{role},#{fileurl})
+    </insert>
+    <update id="insertfile">
+        update  department_role
+            <set>
+             fileurl= #{url}
+            </set>
+        WHERE id = #{id}
+    </update>
+    <delete id="deleteDept">
+        DELETE FROM department_role
+        WHERE id = #{id} or name = #{name}
+    </delete>
+    <select id="getfindid" resultType="com.example.virlearning.entity.Department">
+        select * from department_role
+        <where>
+            <if test="id != null ">
+                and id =#{ id }
+            </if>
+        </where>
+    </select>
+    <update id="modifyDept">
+        update department_role
+        <set >
+            <if test="name != null and name != ''" >
+                name = #{name},
+            </if>
+            <if test="dep_inf != null and dep_inf != ''" >
+                dep_inf = #{dep_inf},
+            </if>
+            <if test="play_role!= null and play_role != ''" >
+                play_role = #{role},
+            </if>
+            <if test="fileurl!= null and fileurl != ''" >
+                fileurl = #{fileurl},
+            </if>
+        </set>
+        where id=#{id}
+    </update>
+
+
+
+
+</mapper>
